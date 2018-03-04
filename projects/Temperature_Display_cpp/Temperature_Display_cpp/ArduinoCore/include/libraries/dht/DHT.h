@@ -18,6 +18,9 @@ written by Adafruit Industries
 
 // Define where debug output will be printed.
 #define DEBUG_PRINTER Serial
+#define DHT_DEBUG
+
+#define MIN_INTERVAL 2000
 
 // Setup debug printing macros.
 #ifdef DHT_DEBUG
@@ -28,12 +31,31 @@ written by Adafruit Industries
 #define DEBUG_PRINTLN(...) {}
 #endif
 
+// macro which tells if a timeout happened.
+// Takes three parameters:
+// start_time: time when user started measuring time, it is time from the past.
+//             Usually measured using micros() or mills().
+// current_time: time to verify timeout against.
+//               Usually measured using micros() or mills().
+// value: timeout value.
+#define timeout(start_time, current_time, value) (current_time - start_time) > value ? true : false
+
+// #ifdef __AVR
+    // // On AVR platforms use direct GPIO port access as it's much faster and better
+    // // for catching pulses that are 10's of microseconds in length:
+// #define pin_read(bit, port) (*portInputRegister(port) & bit) ? HIGH : LOW
+// #else
+    // // Otherwise fall back to using digitalRead (this seems to be necessary on ESP8266
+    // // right now, perhaps bugs in direct port access functions?).
+// #define pin_read() digitalRead(_pin)
+// #endif
+
+
 // Define types of sensors.
 #define DHT11 11
 #define DHT22 22
 #define DHT21 21
 #define AM2301 21
-
 
 class DHT {
 	public:
@@ -45,6 +67,7 @@ class DHT {
 	float computeHeatIndex(float temperature, float percentHumidity, bool isFahrenheit=true);
 	float readHumidity(bool force=false);
 	boolean read(bool force=false);
+    bool pin_read();
 
 	private:
 	uint8_t data[5];
@@ -56,20 +79,6 @@ class DHT {
 	#endif
 	uint32_t _lastreadtime, _maxcycles;
 	bool _lastresult;
-
-	uint32_t expectPulse(bool level);
-
-};
-
-class InterruptLock {
-	public:
-	InterruptLock() {
-		noInterrupts();
-	}
-	~InterruptLock() {
-		interrupts();
-	}
-
 };
 
 #endif
