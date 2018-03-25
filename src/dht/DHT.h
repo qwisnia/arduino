@@ -2,6 +2,7 @@
 
 MIT license
 written by Adafruit Industries
+modified by qwisnia
 */
 #ifndef DHT_H
 #define DHT_H
