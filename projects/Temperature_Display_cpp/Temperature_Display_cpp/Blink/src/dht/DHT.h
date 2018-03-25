@@ -2,6 +2,7 @@
 
 MIT license
 written by Adafruit Industries
+modified by qwisnia
 */
 #ifndef DHT_H
 #define DHT_H
@@ -18,7 +19,6 @@ written by Adafruit Industries
 
 // Define where debug output will be printed.
 #define DEBUG_PRINTER Serial
-#define DHT_DEBUG
 
 #define MIN_INTERVAL 2000
 

@@ -137,7 +137,7 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>DEBUG</Value>
-      <Value>F_CPU=16000000L</Value>
+      <Value>F_CPU=8000000L</Value>
       <Value>ARDUINO=10805</Value>
       <Value>ARDUINO_AVR_UNO</Value>
       <Value>ARDUINO_ARCH_AVR</Value>
@@ -156,10 +156,11 @@
       <Value>../include/libraries/dht</Value>
     </ListValues>
   </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize for size (-Os)</avrgcc.compiler.optimization.level>
   <avrgcc.compiler.optimization.OtherFlags>-fno-threadsafe-statics</avrgcc.compiler.optimization.OtherFlags>
   <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
   <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcc.compiler.optimization.DebugLevel>
   <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
   <avrgcc.compiler.warnings.InhibitAllWarnings>True</avrgcc.compiler.warnings.InhibitAllWarnings>
   <avrgcc.compiler.miscellaneous.OtherFlags>-std=gnu99 -std=gnu11</avrgcc.compiler.miscellaneous.OtherFlags>
@@ -168,7 +169,7 @@
   <avrgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>DEBUG</Value>
-      <Value>F_CPU=16000000L</Value>
+      <Value>F_CPU=8000000L</Value>
       <Value>ARDUINO=10805</Value>
       <Value>ARDUINO_AVR_UNO</Value>
       <Value>ARDUINO_ARCH_AVR</Value>
@@ -191,7 +192,7 @@
   <avrgcccpp.compiler.optimization.OtherFlags>-fno-threadsafe-statics</avrgcccpp.compiler.optimization.OtherFlags>
   <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
   <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
-  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.optimization.DebugLevel>Maximum (-g3)</avrgcccpp.compiler.optimization.DebugLevel>
   <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
   <avrgcccpp.compiler.warnings.InhibitAllWarnings>True</avrgcccpp.compiler.warnings.InhibitAllWarnings>
   <avrgcccpp.compiler.miscellaneous.OtherFlags>-std=gnu++11</avrgcccpp.compiler.miscellaneous.OtherFlags>
@@ -266,9 +267,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="include\core\WString.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="include\libraries\dht\DHT.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="include\libraries\liquid_crystal\LiquidCrystal.h">
@@ -352,9 +350,6 @@
     <Compile Include="src\core\WString.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\libraries\dht\DHT.cpp">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="src\libraries\liquid_crystal\LiquidCrystal.cpp">
       <SubType>compile</SubType>
     </Compile>
@@ -367,7 +362,6 @@
     <Folder Include="include\core\" />
     <Folder Include="include\libraries" />
     <Folder Include="include\libraries\liquid_crystal" />
-    <Folder Include="include\libraries\dht" />
     <Folder Include="include\libraries\spi" />
     <Folder Include="include\variants\" />
     <Folder Include="include\variants\standard\" />
@@ -376,7 +370,6 @@
     <Folder Include="src\core\PreprocessingAssembly\" />
     <Folder Include="src\libraries" />
     <Folder Include="src\libraries\liquid_crystal" />
-    <Folder Include="src\libraries\dht" />
     <Folder Include="src\libraries\spi" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

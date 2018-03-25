@@ -7,7 +7,9 @@
 //End of Auto generated function prototypes by Atmel Studio
 
 #include "LiquidCrystal.h"
-#include "DHT.h"
+#include "src/dht/DHT.h"
+
+#include <avr/power.h>
 
 // what digital pin we're connected to
 #define DHTPIN 13
@@ -32,6 +34,8 @@ int main() {
 	
 	// Initialize ArduinoUNO
 	init();
+	
+	clock_prescale_set(clock_div_2);
 	
 	// set up the LCD's number of columns and rows:
 	lcd.begin(16, 2);
@@ -73,7 +77,7 @@ int main() {
 			lcd.print(" *C ");		
 		}
 		
-		delay(10000);
+		delay(2000);
 	}
 	
 	return 0;

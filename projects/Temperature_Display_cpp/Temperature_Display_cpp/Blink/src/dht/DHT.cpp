@@ -2,6 +2,10 @@
 
 MIT license
 written by Adafruit Industries
+modified by qwisnia
+
+On Arduino UNO library works with 16,8 and 4 MHZ clocks.
+On 8 and 4 MHZ clocks not every read will succeed.
 */
 
 #include "DHT.h"
@@ -203,6 +207,7 @@ boolean DHT::read(bool force) {
         // If sensor outputs '0' then the hight state lasts 26-28us.
         // If the sensor outputs '1' then the high state lasts 70us.
         // The timeout macro is intentionally not used.
+		// sensor signal
 		do {
 			
 			bit_time = micros() - bit_start_time;
