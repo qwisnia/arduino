@@ -40,17 +40,6 @@ written by Adafruit Industries
 // value: timeout value.
 #define timeout(start_time, current_time, value) (current_time - start_time) > value ? true : false
 
-// #ifdef __AVR
-    // // On AVR platforms use direct GPIO port access as it's much faster and better
-    // // for catching pulses that are 10's of microseconds in length:
-// #define pin_read(bit, port) (*portInputRegister(port) & bit) ? HIGH : LOW
-// #else
-    // // Otherwise fall back to using digitalRead (this seems to be necessary on ESP8266
-    // // right now, perhaps bugs in direct port access functions?).
-// #define pin_read() digitalRead(_pin)
-// #endif
-
-
 // Define types of sensors.
 #define DHT11 11
 #define DHT22 22
@@ -59,7 +48,7 @@ written by Adafruit Industries
 
 class DHT {
 	public:
-	DHT(uint8_t pin, uint8_t type, uint8_t count=6);
+	DHT(uint8_t pin, uint8_t type);
 	void begin(void);
 	float readTemperature(bool S=false, bool force=false);
 	float convertCtoF(float);
@@ -67,7 +56,7 @@ class DHT {
 	float computeHeatIndex(float temperature, float percentHumidity, bool isFahrenheit=true);
 	float readHumidity(bool force=false);
 	boolean read(bool force=false);
-    bool pin_read();
+    inline bool pin_read() __attribute__((always_inline));
 
 	private:
 	uint8_t data[5];

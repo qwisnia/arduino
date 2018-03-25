@@ -6,7 +6,7 @@ written by Adafruit Industries
 
 #include "DHT.h"
 
-DHT::DHT(uint8_t pin, uint8_t type, uint8_t count) {
+DHT::DHT(uint8_t pin, uint8_t type) {
 	_pin = pin;
 	_type = type;
 	#ifdef __AVR
@@ -196,21 +196,22 @@ boolean DHT::read(bool force) {
 			}
             
             bit_start_time = micros();
-			
+
 		} while (pin_read() == LOW); // LOW
-		
+
         // The high state depends on transmitted value.
         // If sensor outputs '0' then the hight state lasts 26-28us.
         // If the sensor outputs '1' then the high state lasts 70us.
         // The timeout macro is intentionally not used.
-		do {			
+		do {
+			
 			bit_time = micros() - bit_start_time;
 				
 			// cope with the micros() function overflow
 			if (bit_time < 0) {
 				bit_time += 0x100000000;
 			}
-								
+				
 			// timeout
 			if (bit_time > 100) {
 				DEBUG_PRINTLN(F("Time difference too big."))
@@ -219,7 +220,8 @@ boolean DHT::read(bool force) {
 			}
 
 		} while (pin_read() == HIGH); // HIGH
-			
+		
+		// analyze the bit timing
 		data[bit_cnt / 8] <<= 1;
 		if (bit_time >= 50) {
 			data[bit_cnt / 8] |= 1;
