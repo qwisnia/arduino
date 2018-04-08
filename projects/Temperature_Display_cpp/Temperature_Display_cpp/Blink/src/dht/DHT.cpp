@@ -13,6 +13,15 @@ On 8 and 4 MHZ clocks not every read will succeed.
 DHT::DHT(uint8_t pin, uint8_t type) {
 	_pin = pin;
 	_type = type;
+
+	// depending on the DHT sensor we need to send the
+	// initializing pulse of a different length
+	if (_type == DHT11) {
+		_init_pulse_length = 19;
+	} else {
+		_init_pulse_length = 1;
+	}
+
 	#ifdef __AVR
 	_bit = digitalPinToBitMask(pin);
 	_port = digitalPinToPort(pin);
@@ -35,24 +44,24 @@ float DHT::readTemperature(bool S, bool force) {
 	if (read(force)) {
 		switch (_type) {
 			case DHT11:
-			f = data[2];
-			if(S) {
-				f = convertCtoF(f);
-			}
-			break;
+				f = data[2];
+				if(S) {
+					f = convertCtoF(f);
+				}
+				break;
 			case DHT22:
 			case DHT21:
-			f = data[2] & 0x7F;
-			f *= 256;
-			f += data[3];
-			f *= 0.1;
-			if (data[2] & 0x80) {
-				f *= -1;
-			}
-			if(S) {
-				f = convertCtoF(f);
-			}
-			break;
+				f = data[2] & 0x7F;
+				f *= 256;
+				f += data[3];
+				f *= 0.1;
+				if (data[2] & 0x80) {
+					f *= -1;
+				}
+				if(S) {
+					f = convertCtoF(f);
+				}
+				break;
 		}
 	}
 	return f;
@@ -71,14 +80,14 @@ float DHT::readHumidity(bool force) {
 	if (read()) {
 		switch (_type) {
 			case DHT11:
-			f = data[0];
+                f = data[0];
 			break;
 			case DHT22:
 			case DHT21:
-			f = data[0];
-			f *= 256;
-			f += data[1];
-			f *= 0.1;
+                f = data[0];
+                f *= 256;
+                f += data[1];
+                f *= 0.1;
 			break;
 		}
 	}
@@ -108,17 +117,17 @@ float DHT::computeHeatIndex(float temperature, float percentHumidity, bool isFah
 		-0.00000199 * pow(temperature, 2) * pow(percentHumidity, 2);
 
 		if((percentHumidity < 13) && (temperature >= 80.0) && (temperature <= 112.0))
-		hi -= ((13.0 - percentHumidity) * 0.25) * sqrt((17.0 - abs(temperature - 95.0)) * 0.05882);
+            hi -= ((13.0 - percentHumidity) * 0.25) * sqrt((17.0 - abs(temperature - 95.0)) * 0.05882);
 
 		else if((percentHumidity > 85.0) && (temperature >= 80.0) && (temperature <= 87.0))
-		hi += ((percentHumidity - 85.0) * 0.1) * ((87.0 - temperature) * 0.2);
+            hi += ((percentHumidity - 85.0) * 0.1) * ((87.0 - temperature) * 0.2);
 	}
 
 	return isFahrenheit ? hi : convertFtoC(hi);
 }
 
 boolean DHT::read(bool force) {
-	
+
 	/*
 	 * Method responsible for reading the sensor.
 	 */
@@ -142,20 +151,20 @@ boolean DHT::read(bool force) {
 
 	// Go into high impedance state to let pull-up raise data line level and
 	// start the reading process.
-	
+
 	digitalWrite(_pin, HIGH);
 	delayMicroseconds(100);
 
 	// First set data line low for 1 millisecond.
 	pinMode(_pin, OUTPUT);
 	digitalWrite(_pin, LOW);
-	delay(1);
+	delay(_init_pulse_length);
 
 	// End the start signal by setting data line high for 40 microseconds.
 	digitalWrite(_pin, HIGH);
 	pinMode(_pin, INPUT_PULLUP);
 	delayMicroseconds(40);
-	
+
 	// HIGH - 20-40us, host signal
     current_time = micros();
 	while (pin_read() == HIGH) {
@@ -175,7 +184,7 @@ boolean DHT::read(bool force) {
 			return _lastresult;
 		}
 	}
-	
+
 	// HIGH - 80us, sensor signal
     current_time = micros();
 	while (pin_read() == HIGH) {
@@ -185,20 +194,20 @@ boolean DHT::read(bool force) {
 			return _lastresult;
 		}
 	}
-		
+
 	for (uint8_t bit_cnt = 0; bit_cnt < 40; bit_cnt++) {
-			
+
 		// Low state ('0') initializing 1 bit transmission.
 		// Should last about 50 us, sensor signal
         bit_start_time = current_time = micros();
 		do {
-            
+
             if (timeout(current_time, bit_start_time, 100)) {
 				DEBUG_PRINTLN(F("Read timeout."))
 				_lastresult = false;
 				return _lastresult;
 			}
-            
+
             bit_start_time = micros();
 
 		} while (pin_read() == LOW); // LOW
@@ -209,14 +218,14 @@ boolean DHT::read(bool force) {
         // The timeout macro is intentionally not used.
 		// sensor signal
 		do {
-			
+
 			bit_time = micros() - bit_start_time;
-				
+
 			// cope with the micros() function overflow
 			if (bit_time < 0) {
 				bit_time += 0x100000000;
 			}
-				
+
 			// timeout
 			if (bit_time > 100) {
 				DEBUG_PRINTLN(F("Time difference too big."))
@@ -225,7 +234,7 @@ boolean DHT::read(bool force) {
 			}
 
 		} while (pin_read() == HIGH); // HIGH
-		
+
 		// analyze the bit timing
 		data[bit_cnt / 8] <<= 1;
 		if (bit_time >= 50) {

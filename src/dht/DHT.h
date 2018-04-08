@@ -48,26 +48,26 @@ modified by qwisnia
 
 class DHT {
 	public:
-	DHT(uint8_t pin, uint8_t type);
-	void begin(void);
-	float readTemperature(bool S=false, bool force=false);
-	float convertCtoF(float);
-	float convertFtoC(float);
-	float computeHeatIndex(float temperature, float percentHumidity, bool isFahrenheit=true);
-	float readHumidity(bool force=false);
-	boolean read(bool force=false);
-    inline bool pin_read() __attribute__((always_inline));
+		DHT(uint8_t pin, uint8_t type);
+		void begin(void);
+		float readTemperature(bool S=false, bool force=false);
+		float convertCtoF(float);
+		float convertFtoC(float);
+		float computeHeatIndex(float temperature, float percentHumidity, bool isFahrenheit=true);
+		float readHumidity(bool force=false);
+		boolean read(bool force=false);
+		inline bool pin_read() __attribute__((always_inline));
 
 	private:
-	uint8_t data[5];
-	uint8_t _pin, _type;
-	#ifdef __AVR
-	// Use direct GPIO access on an 8-bit AVR so keep track of the port and bitmask
-	// for the digital pin connected to the DHT.  Other platforms will use digitalRead.
-	uint8_t _bit, _port;
-	#endif
-	uint32_t _lastreadtime, _maxcycles;
-	bool _lastresult;
+		uint8_t data[5];
+		uint8_t _pin, _type, _init_pulse_length;
+		#ifdef __AVR
+		// Use direct GPIO access on an 8-bit AVR so keep track of the port and bitmask
+		// for the digital pin connected to the DHT.  Other platforms will use digitalRead.
+		uint8_t _bit, _port;
+		#endif
+		uint32_t _lastreadtime, _maxcycles;
+		bool _lastresult;
 };
 
 #endif
